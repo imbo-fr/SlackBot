@@ -17,7 +17,7 @@ EOF
 
 ```shell
 pip install -r requirements.txt
-python main.py
+./start.sh
 ```
 
 # Deploy as a service on Synology

@@ -1,4 +1,0 @@
-[2022-03-10 17:45:23,955] [_internal] [_log] [INFO    ]  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
-[2022-03-10 17:52:19,578] [_internal] [_log] [WARNING ]  * Running on all addresses.
-   WARNING: This is a development server. Do not use it in a production deployment.
-[2022-03-10 17:52:19,579] [_internal] [_log] [INFO    ]  * Running on http://[2a02:8428:3036:4201:a159:8f9f:835e:c788]:3500/ (Press CTRL+C to quit)

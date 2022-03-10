@@ -1,1 +1,11 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# VSCode
+.vscode
+
+# Config file
 config
+
+# Log output
+output.log
