@@ -1,54 +1,44 @@
 import os
-from flask import Flask
-from slack import WebClient
-from slackeventsapi import SlackEventAdapter
-from slackbot import SlackBot
+import re
+
+from slack_bolt import App
+from slack_bolt.adapter.socket_mode import SocketModeHandler
+
 
 from util import *
 
 # Logging (local_functions)
 init_logger('output.log','WARN','INFO')
 
-# Initialize a Flask app to host the events adapter
-app = Flask(__name__)
-# Create an events adapter and register it to an endpoint in the slack app for event injestion.
-slack_events_adapter = SlackEventAdapter(os.environ.get("SLACK_EVENTS_TOKEN"), "/slack/events", app)
+app = App(token=os.environ["SLACK_BOT_TOKEN"])
 
-# Initialize a Web API client
-slack_web_client = WebClient(token=os.environ.get("SLACK_TOKEN"))
+# Commands need to be defined in your bot at api.slack.com 
+# See Features - Slash Commands
+@app.command("/hello-bolt")
+def hello(body, ack):
+    ack(f"Hi <@{body['user_id']}>!")
 
-def flip_coin(channel):
-    """Craft the SlackBot, flip the coin and send the message to the channel
-    """
-    # Create a new SlackBot
-    slack_bot = SlackBot(channel)
+@app.message(re.compile("(hello|hi)", re.I))
+def say_hello_regex(say, context):
+    greeting = context["matches"][0]
+    say(f"{greeting}, <@{context['user_id']}>, how are you?")
 
-    # Get the onboarding message payload
-    message = slack_bot.get_message_payload()
-
-    # Post the onboarding message in Slack
-    slack_web_client.chat_postMessage(**message)
+@app.message(re.compile(""))
+def catch_all(say, context):
+    """A catch-all message."""
+    say(f"I didn't get that, <@{context['user_id']}>.")
 
 
-# When a 'message' event is detected by the events adapter, forward that payload
-# to this function.
-@slack_events_adapter.on("message")
-def message(payload):
-    """Parse the message event, and if the activation string is in the text,
-    simulate a coin flip and send the result.
-    """
+@app.event("app_mention")
+def handle_app_mention_events(body, client, say):
+    # Reply to mentions in a thread.
+    client.chat_postMessage(
+        channel=body["event"]["channel"],
+        thread_ts=body["event"]["thread_ts"],
+        text=f"Yes <@{body['event']['user']}>.",
+    )
 
-    # Get the event data from the payload
-    event = payload.get("event", {})
-
-    # Get the text from the event that came through
-    text = event.get("text")
-
-    # Check and see if the activation phrase was in the text of the message.
-    # If so, execute the code to flip a coin.
-    if "hey sammy, flip a coin" in text.lower():
-        return flip_coin(event.get("channel"))
 
 if __name__ == "__main__":
-    # Run our app
-    app.run()
+    handler = SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"])
+    handler.start()

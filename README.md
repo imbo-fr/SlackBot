@@ -1,17 +1,18 @@
 # SlackBot
 
-A simple Python SlackBot to execute custom command and action.
+A simple Python SlackBot to execute custom command and action on Synology system (non-docker).
 
-> Originaly based on the [digitalocean- How To Build a Slackbot in Python on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-build-a-slackbot-in-python-on-ubuntu-20-04)
+> Originaly based on the [How to write a modern Slack bot in Python](https://www.stavros.io/posts/how-to-slack-bot/)
 
 # Usage
 
-Set `SLACK_TOKEN` and `SLACK_EVENTS_TOKEN` in the **config** file.
+Set `SLACK_TOKEN` and `SLACK_BOT_TOKEN` in the **config** file.
 
 ```shell
 cat <<EOF >>./config
-export SLACK_TOKEN="YOUR_SLACK_TOKEN"
-export SLACK_EVENTS_TOKEN="YOUR_SLACK_EVENTS_TOKEN"
+export SLACK_APP_TOKEN="YOUR_SLACK_APP_TOKEN"
+export SLACK_BOT_TOKEN="YOUR_SLACK_BOT_TOKEN"
+
 EOF
 ```
 
