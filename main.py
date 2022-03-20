@@ -12,7 +12,7 @@ init_logger('output.log','WARN','INFO')
 
 app = App(token=os.environ["SLACK_BOT_TOKEN"])
 
-# Commands need to be defined in your bot at api.slack.com 
+# Commands need to be defined in your bot at api.slack.com
 # See Features - Slash Commands
 @app.command("/hello-bolt")
 def hello(body, ack):
