@@ -18,6 +18,11 @@ app = App(token=os.environ["SLACK_BOT_TOKEN"])
 def hello(body, ack):
     ack(f"Hi <@{body['user_id']}>!")
 
+@app.command("/boot-fixe")
+def boot_fixe(body, ack):
+    os.system('/usr/syno/sbin/synonet --wake D4:3D:7E:EA:6A:8F eth0')
+    ack(f"Command done!")
+
 @app.message(re.compile("(hello|hi)", re.I))
 def say_hello_regex(say, context):
     greeting = context["matches"][0]
