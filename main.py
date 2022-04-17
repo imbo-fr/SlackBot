@@ -20,7 +20,9 @@ def hello(body, ack):
 
 @app.command("/boot-fixe")
 def boot_fixe(body, ack):
-    os.system('/usr/syno/sbin/synonet --wake D4:3D:7E:EA:6A:8F eth0')
+    cmd = '/usr/syno/sbin/synonet --wake D4:3D:7E:EA:6A:8F eth0'
+    with os.popen(cmd) as res:
+        print(res.readlines())
     ack(f"Command done!")
 
 @app.message(re.compile("(hello|hi)", re.I))
