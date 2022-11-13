@@ -25,6 +25,20 @@ def boot_fixe(body, ack):
         print(res.readlines())
     ack(f"Command done!")
 
+@app.command("/boot-fixe-antoine")
+def boot_fixe(body, ack):
+    cmd = '/usr/syno/sbin/synonet --wake D4:3D:7E:EA:6A:8F eth0'
+    with os.popen(cmd) as res:
+        print(res.readlines())
+    ack(f"Command done!")
+
+@app.command("/boot-fixe-magalie")
+def boot_fixe(body, ack):
+    cmd = '/usr/syno/sbin/synonet --wake D8:50:E6:40:E7:F7 eth0'
+    with os.popen(cmd) as res:
+        print(res.readlines())
+    ack(f"Command done!")
+
 @app.message(re.compile("(hello|hi)", re.I))
 def say_hello_regex(say, context):
     greeting = context["matches"][0]
