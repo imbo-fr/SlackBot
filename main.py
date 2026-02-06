@@ -18,24 +18,27 @@ app = App(token=os.environ["SLACK_BOT_TOKEN"])
 def hello(body, ack):
     ack(f"Hi <@{body['user_id']}>!")
 
-@app.command("/boot-fixe")
-def boot_fixe(body, ack):
-    cmd = '/usr/syno/sbin/synonet --wake D4:3D:7E:EA:6A:8F eth0'
-    with os.popen(cmd) as res:
-        print(res.readlines())
-    ack(f"Command done!")
-
 @app.command("/boot-fixe-antoine")
 def boot_fixe(body, ack):
-    cmd = '/usr/syno/sbin/synonet --wake D4:3D:7E:EA:6A:8F eth0'
+    cmd = 'python wakeonlan.py -i 192.168.1.255 D4-3D-7E-EA-6A-8F'
     with os.popen(cmd) as res:
         print(res.readlines())
     ack(f"Command done!")
 
 @app.command("/boot-fixe-magalie")
 def boot_fixe(body, ack):
-    cmd = '/usr/syno/sbin/synonet --wake D8:50:E6:40:E7:F7 eth0'
+    cmd = 'python wakeonlan.py -i 192.168.1.255 D8-50-E6-40-E7-F7'
     with os.popen(cmd) as res:
+        print(res.readlines())
+    ack(f"Command done!")
+
+@app.command("/boot-all")
+def boot_fixe(body, ack):
+    cmd = 'python wakeonlan.py -i 192.168.1.255 D4-3D-7E-EA-6A-8F'
+    cmd2 = 'python wakeonlan.py -i 192.168.1.255 D8-50-E6-40-E7-F7'
+    with os.popen(cmd) as res:
+        print(res.readlines())
+    with os.popen(cmd2) as res:
         print(res.readlines())
     ack(f"Command done!")
 
@@ -44,10 +47,10 @@ def say_hello_regex(say, context):
     greeting = context["matches"][0]
     say(f"{greeting}, <@{context['user_id']}>, how are you?")
 
-@app.message(re.compile(""))
-def catch_all(say, context):
-    """A catch-all message."""
-    say(f"I didn't get that, <@{context['user_id']}>.")
+#@app.message(re.compile(""))
+#def catch_all(say, context):
+#    """A catch-all message."""
+#    say(f"I didn't get that, <@{context['user_id']}>.")
 
 
 @app.event("app_mention")
