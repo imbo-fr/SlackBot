@@ -11,6 +11,8 @@ A simple Python SlackBot to execute custom command and action on FreeBSD system 
 
 # Install
 
+Git clone this repository to `/usr/local/SlackBot`
+
 Create and use a Python virtual environnement to install packages
 
 ```shell
