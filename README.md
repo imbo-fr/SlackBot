@@ -80,7 +80,7 @@ Enable service auto-start
 cat <<EOF >>/etc/rc.conf.d/slackbot
 slackbot_enable="YES"
 EOF
-
+```
 
 Then you can manage the service
 
