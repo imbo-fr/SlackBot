@@ -1,6 +1,6 @@
 # SlackBot
 
-A simple Python SlackBot to execute custom command and action on Synology system (non-docker).
+A simple Python SlackBot to execute custom command and action on FreeBSD system with service (OpnSense)
 
 > Originaly based on the [How to write a modern Slack bot in Python](https://www.stavros.io/posts/how-to-slack-bot/)
 
@@ -21,42 +21,71 @@ pip install -r requirements.txt
 
 # Usage
 
-In the cloned folder, create **config** file with slack credentials.
-
-```shell
-cat <<EOF >>./config
-export SLACK_APP_TOKEN="YOUR_SLACK_APP_TOKEN"
-export SLACK_BOT_TOKEN="YOUR_SLACK_BOT_TOKEN"
-EOF
-```
-
 Start the bot
 
 ```shell
-./start.sh
+export SLACK_APP_TOKEN="REDACTED"
+export SLACK_BOT_TOKEN="REDACTED"
+.venv/bin/python3 main.py
 ```
 
-# Deploy as a service on Synology
+# Deploy as a service on FreeBSD
 
-Create the synology service file
+Create the service
 
 ```shell
-cat <<EOF >>/etc/init/slackbot.conf
-# only start this service after the sshd process has started
-start on started sshd
+cat <<EOF >>/usr/local/etc/rc.d/slackbot
+#!/bin/sh
 
-# stop the service gracefully if the runlevel changes to 'reboot'
-stop on runlevel [06]
+# PROVIDE: slackbot
+# REQUIRE: DAEMON
+# KEYWORD: shutdown
 
-# exec the process.
-exec /volume1/homes/admin/slackbot/start.sh
+. /etc/rc.subr
+
+name="slackbot"
+rcvar="slackbot_enable"
+
+# Env vars
+export SLACK_APP_TOKEN="REDACTED"
+export SLACK_BOT_TOKEN="REDACTED"
+
+# PID file management (optional but recommended for background services)
+pidfile="/var/run/${name}.pid"
+
+# --- CONFIGURATION ---
+script_dir="/usr/local/SlackBot"
+python_venv="${script_dir}/.venv/bin/python3"
+script_file="${script_dir}/main.py"
+
+# Use daemon:
+# -S : Syslog
+# -T : Tag
+# -f : Fork (background)
+# -r : Restart automatically if it crashes
+# -P : PID file
+command="/usr/sbin/daemon"
+command_args="-S -T slackbot -f -r -P ${pidfile} ${python_venv} ${script_file}"
+
+load_rc_config $name
+run_rc_command "$1"
 EOF
 ```
+
+Enable service auto-start 
+
+```shell
+cat <<EOF >>/etc/rc.conf.d/slackbot
+slackbot_enable="YES"
+EOF
+
 
 Then you can manage the service
 
 ```
-start slackbot
-status slackbot
-stop slackbot
+service slackbot start
+service slackbot status
+service slackbot stop
+
+service slackbot enable
 ```
