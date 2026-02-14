@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/SlackBot/.venv/bin/python3
 """
 Small module for use with the wake on lan protocol.
 
@@ -64,9 +64,18 @@ def send_magic_packet(
     except ValueError:
         pass
 
+#    with socket.socket(address_family, socket.SOCK_DGRAM) as sock:
+#        if interface is not None:
+#            sock.bind((interface, 0))
+#        sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+#        sock.connect((ip_address, port))
+#        for packet in packets:
+#            sock.send(packet)
+
     with socket.socket(address_family, socket.SOCK_DGRAM) as sock:
         if interface is not None:
-            sock.bind((interface, 0))
+            # On FreeBSD, bind to the interface's IP address instead of name
+            sock.bind((interface, 0))  # interface should be an IP address
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         sock.connect((ip_address, port))
         for packet in packets:

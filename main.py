@@ -1,11 +1,17 @@
 import os
+import sys 
 import re
 
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
-
 from util import *
+
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+WOL_SCRIPT = os.path.join(BASE_DIR, "wakeonlan.py")
+PYTHON_EXE = sys.executable 
+
 
 # Logging (local_functions)
 init_logger('output.log','WARN','INFO')
@@ -20,22 +26,29 @@ def hello(body, ack):
 
 @app.command("/boot-fixe-antoine")
 def boot_fixe(body, ack):
-    cmd = 'python wakeonlan.py -i 192.168.1.255 D4-3D-7E-EA-6A-8F'
+    cmd = f"{PYTHON_EXE} {WOL_SCRIPT} -n 192.168.1.1 -i 192.168.1.255 D4-3D-7E-EA-6A-8F"
     with os.popen(cmd) as res:
         print(res.readlines())
     ack(f"Command done!")
 
 @app.command("/boot-fixe-magalie")
 def boot_fixe(body, ack):
-    cmd = 'python wakeonlan.py -i 192.168.1.255 D8-50-E6-40-E7-F7'
+    cmd = f"{PYTHON_EXE} {WOL_SCRIPT} -n 192.168.1.1 -i 192.168.1.255 D8-50-E6-40-E7-F7"
     with os.popen(cmd) as res:
         print(res.readlines())
     ack(f"Command done!")
 
-@app.command("/boot-all")
+@app.command("/boot-pc-tv")
 def boot_fixe(body, ack):
-    cmd = 'python wakeonlan.py -i 192.168.1.255 D4-3D-7E-EA-6A-8F'
-    cmd2 = 'python wakeonlan.py -i 192.168.1.255 D8-50-E6-40-E7-F7'
+    cmd = f"{PYTHON_EXE} {WOL_SCRIPT} -n 192.168.1.1 -i 192.168.1.255 1C-69-7A-06-89-A6"
+    with os.popen(cmd) as res:
+        print(res.readlines())
+    ack(f"Command done!")
+
+@app.command("/boot-fixes")
+def boot_fixe(body, ack):
+    cmd = f"{PYTHON_EXE} {WOL_SCRIPT} -n 192.168.1.1 -i 192.168.1.255 D8-50-E6-40-E7-F7"
+    cmd = f"{PYTHON_EXE} {WOL_SCRIPT} -n 192.168.1.1 -i 192.168.1.255 D4-3D-7E-EA-6A-8F"
     with os.popen(cmd) as res:
         print(res.readlines())
     with os.popen(cmd2) as res:
