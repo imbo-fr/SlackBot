@@ -16,8 +16,8 @@ Git clone this repository to `/usr/local/SlackBot`
 Create and use a Python virtual environnement to install packages
 
 ```shell
-python3 -m virtualenv .venv
-source .venv/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate.csh
 pip install -r requirements.txt
 ```
 

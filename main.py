@@ -25,30 +25,30 @@ def hello(body, ack):
     ack(f"Hi <@{body['user_id']}>!")
 
 @app.command("/boot-fixe-antoine")
-def boot_fixe(body, ack):
+def boot_fixe_antoine(body, ack):
     cmd = f"{PYTHON_EXE} {WOL_SCRIPT} -n 192.168.1.1 -i 192.168.1.255 D4-3D-7E-EA-6A-8F"
     with os.popen(cmd) as res:
         print(res.readlines())
     ack(f"Command done!")
 
 @app.command("/boot-fixe-magalie")
-def boot_fixe(body, ack):
+def boot_fixe_magalie(body, ack):
     cmd = f"{PYTHON_EXE} {WOL_SCRIPT} -n 192.168.1.1 -i 192.168.1.255 D8-50-E6-40-E7-F7"
     with os.popen(cmd) as res:
         print(res.readlines())
     ack(f"Command done!")
 
 @app.command("/boot-pc-tv")
-def boot_fixe(body, ack):
+def boot_fixe_tv(body, ack):
     cmd = f"{PYTHON_EXE} {WOL_SCRIPT} -n 192.168.1.1 -i 192.168.1.255 1C-69-7A-06-89-A6"
     with os.popen(cmd) as res:
         print(res.readlines())
     ack(f"Command done!")
 
 @app.command("/boot-fixes")
-def boot_fixe(body, ack):
-    cmd = f"{PYTHON_EXE} {WOL_SCRIPT} -n 192.168.1.1 -i 192.168.1.255 D8-50-E6-40-E7-F7"
+def boot_fixe_both(body, ack):
     cmd = f"{PYTHON_EXE} {WOL_SCRIPT} -n 192.168.1.1 -i 192.168.1.255 D4-3D-7E-EA-6A-8F"
+    cmd2 = f"{PYTHON_EXE} {WOL_SCRIPT} -n 192.168.1.1 -i 192.168.1.255 D8-50-E6-40-E7-F7"
     with os.popen(cmd) as res:
         print(res.readlines())
     with os.popen(cmd2) as res:
