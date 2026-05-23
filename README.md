@@ -90,4 +90,5 @@ service slackbot status
 service slackbot stop
 
 service slackbot enable
+service slackbot disable
 ```
